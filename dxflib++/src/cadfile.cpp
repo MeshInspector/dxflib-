@@ -13,20 +13,28 @@
  */
 dxflib::cadfile::cadfile(const char* path) : filename_(path)
 {
-	read_file();
+  std::ifstream fs;
+  fs.open(filename_);
+	read_file(fs);
 	parse_data();
 	linker();
+}
+
+dxflib::cadfile::cadfile(const wchar_t* path): wfilename_(path)
+{
+  std::ifstream fs;
+  fs.open(wfilename_);
+  read_file(fs);
+  parse_data();
+  linker();
 }
 
 
 /**
  * \brief Reads the Dxf File
  */
-void dxflib::cadfile::read_file()
+void dxflib::cadfile::read_file(std::ifstream& fs)
 {
-	std::ifstream fs;
-
-	fs.open(filename_);
 	if (fs.good())
 	{
 		// Preallocating memory
@@ -65,6 +73,7 @@ void dxflib::cadfile::parse_data()
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
 	entities::arc_buffer ab;
+  entities::circle_buffer cb;
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -95,6 +104,12 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::hatch;
 				continue;
 			}
+      if (cl == start_markers.acdbcircle) {
+        extraction_flag = true;
+        current_entity = entities::entity_types::circle;
+        continue;
+      }
+
 			if (cl == start_markers.text || cl == start_markers.mtext)
 			{
 				extraction_flag = true;
@@ -136,6 +151,9 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::arc:
 				if (ab.parse(cl, nl))
 					linenum++;
+      case entities::entity_types::circle:
+        if (cb.parse(cl, nl))
+          linenum++;
 			default:
 				break;
 			}
@@ -173,6 +191,11 @@ void dxflib::cadfile::parse_data()
 				ab.free();
 				extraction_flag = false;
 				break;
+      case entities::entity_types::circle:
+        circles_.emplace_back(cb);
+        cb.free();
+        extraction_flag = false;
+        break;
 			case entities::entity_types::all:
 				break;
 			}

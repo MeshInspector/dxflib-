@@ -18,6 +18,7 @@ namespace dxflib
 		 * \param path Path to the DXF file
 		 */
 		explicit cadfile(const char* path);
+    explicit cadfile(const wchar_t* path);
 
 		// Public Interface
 		// Lines
@@ -30,8 +31,13 @@ namespace dxflib
 		std::vector<entities::text>& get_text() { return basic_text_; }
 		// Arc
 		const std::vector<entities::arc>& get_arcs() const { return arcs_; }
-		// Filename of the DXF file
-		std::string get_filename() const { return std::string{filename_}; }
+
+    // Circle
+    const std::vector<entities::circle>& get_circles() const { return circles_; }
+
+    // Filename of the DXF file
+		std::wstring get_wfilename() const { return std::wstring{wfilename_}; }
+    std::string get_filename() const { return std::string{filename_}; }
 		// DXF Data
 		const std::vector<std::string>& get_data() const { return data_; }
 
@@ -42,12 +48,14 @@ namespace dxflib
 		std::vector<entities::hatch> hatches_; // HATCH Entities
 		std::vector<entities::text> basic_text_; // TEXT Entities
 		std::vector<entities::arc> arcs_; // ARC Entities
+    std::vector<entities::circle> circles_; // CIRCLE Entities
 
-		void read_file(); // Reads the file that is stored in filename_
+		void read_file(std::ifstream& fs); // Reads the file that is stored in filename_
 		void parse_data(); // Main parse function for the dxf file: iterates through the data_ vector and
 		void linker(); // Links entities to other entities, noteably hatches and polyline
 
-		const char* filename_; // Path to the DXF file
+    const char* filename_;
+		const wchar_t* wfilename_; // Path to the DXF file
 		std::vector<std::string> data_; // raw data from the dxf file
 	};
 
@@ -73,6 +81,7 @@ namespace dxflib
 			const char* text{"TEXT"};
 			const char* mtext{"MTEXT"};
 			const char* arc{ "ARC" };
+      const char* acdbcircle{"AcDbCircle"};
 		};
 	}
 }
