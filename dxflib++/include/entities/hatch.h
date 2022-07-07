@@ -3,6 +3,7 @@
 #include "dxflib++/include/entities/point.h"
 #include "dxflib++/include/entities/lwpolyline.h"
 #include "dxflib++/include/entities/arc.h"
+#include "dxflib++/include/entities/circle.h"
 
 namespace dxflib::entities
 {

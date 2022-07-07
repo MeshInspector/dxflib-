@@ -15,6 +15,7 @@ namespace dxflib::entities
 		hatch,
 		text,
 		arc,
+    circle,
 		all
 	};
 
