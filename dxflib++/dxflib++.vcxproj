@@ -145,6 +145,7 @@
     <ClInclude Include="include\app.h" />
     <ClInclude Include="include\Cadfile.h" />
     <ClInclude Include="include\entities\arc.h" />
+    <ClInclude Include="include\entities\circle.h" />
     <ClInclude Include="include\entities\entity.h" />
     <ClInclude Include="include\entities\hatch.h" />
     <ClInclude Include="include\entities\line.h" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="src\cadfile.cpp" />
     <ClCompile Include="src\entities\arc.cpp" />
+    <ClCompile Include="src\entities\circle.cpp" />
     <ClCompile Include="src\entities\entitiy.cpp" />
     <ClCompile Include="src\entities\hatch.cpp" />
     <ClCompile Include="src\entities\line.cpp" />
