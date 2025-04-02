@@ -4,6 +4,7 @@
 #include "dxflib++/include/entities/lwpolyline.h"
 #include "dxflib++/include/entities/text.h"
 #include "dxflib++/include/entities/arc.h"
+#include "dxflib++/include/entities/spline.h"
 #include <fstream>
 #include <string>
 
@@ -65,6 +66,7 @@ void dxflib::cadfile::parse_data()
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
 	entities::arc_buffer ab;
+	entities::spline_buf splb;           // Spline Buffer
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -107,6 +109,12 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::arc;
 				continue;
 			}
+			if (cl == start_markers.spline)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::spline;
+				continue;
+			}
 		}
 		/*
 		 * Extraction Path - While the extraction flag is true and the current entity
@@ -136,6 +144,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::arc:
 				if (ab.parse(cl, nl))
 					linenum++;
+				break;
+			case entities::entity_types::spline:
+				if (splb.parse(cl, nl))
+					linenum++;
+				break;
 			default:
 				break;
 			}
@@ -171,6 +184,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::arc:
 				arcs_.emplace_back(ab);
 				ab.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::spline:
+				splines_.emplace_back(splb);
+				splb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::all:
