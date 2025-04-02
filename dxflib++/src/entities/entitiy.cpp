@@ -1,5 +1,6 @@
 #include "dxflib++/include/entities/entity.h"
 #include "dxflib++/include/utilities.h"
+#include <stdexcept>
 
 dxflib::entities::entity_buffer_base::~entity_buffer_base()
 = default;
