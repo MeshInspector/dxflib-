@@ -16,6 +16,7 @@ namespace dxflib::entities
 		text,
 		arc,
 		spline,
+		circle,
 		all
 	};
 

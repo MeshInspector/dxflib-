@@ -14,7 +14,18 @@
  */
 dxflib::cadfile::cadfile(const char* path) : filename_(path)
 {
-	read_file();
+	std::ifstream fs;
+	fs.open(filename_);
+	read_file(fs);
+	parse_data();
+	linker();
+}
+
+dxflib::cadfile::cadfile(const wchar_t* path): wfilename_(path)
+{
+	std::ifstream fs;
+	fs.open(wfilename_);
+	read_file(fs);
 	parse_data();
 	linker();
 }
@@ -23,11 +34,8 @@ dxflib::cadfile::cadfile(const char* path) : filename_(path)
 /**
  * \brief Reads the Dxf File
  */
-void dxflib::cadfile::read_file()
+void dxflib::cadfile::read_file(std::ifstream& fs)
 {
-	std::ifstream fs;
-
-	fs.open(filename_);
 	if (fs.good())
 	{
 		// Preallocating memory
@@ -65,8 +73,9 @@ void dxflib::cadfile::parse_data()
 	entities::lwpolyline_buffer lwb; // Lwpolyline Buffer
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
-	entities::arc_buffer ab;
-	entities::spline_buf splb;           // Spline Buffer
+	entities::arc_buffer ab;         // Arch buffer
+	entities::spline_buf splb;       // Spline Buffer
+	entities::circle_buffer cb;      // Circle Buffer
 
 	for (int linenum{0}; linenum < static_cast<int>(data_.size()) - 1; ++linenum)
 	{
@@ -115,6 +124,12 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::spline;
 				continue;
 			}
+			if (cl == start_markers.circle)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::circle;
+				continue;
+			}
 		}
 		/*
 		 * Extraction Path - While the extraction flag is true and the current entity
@@ -149,6 +164,9 @@ void dxflib::cadfile::parse_data()
 				if (splb.parse(cl, nl))
 					linenum++;
 				break;
+			case entities::entity_types::circle:
+				if (cb.parse(cl, nl))
+					linenum++;
 			default:
 				break;
 			}
@@ -189,6 +207,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::spline:
 				splines_.emplace_back(splb);
 				splb.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::circle:
+				circles_.emplace_back(cb);
+				cb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::all:
