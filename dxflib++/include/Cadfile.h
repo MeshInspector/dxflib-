@@ -1,6 +1,7 @@
 #pragma once
 #include "dxflib++/include/entities/line.h"
 #include "dxflib++/include/entities/spline.h"
+#include "dxflib++/include/entities/ellipse.h"
 #include "dxflib++/include/entities/lwpolyline.h"
 #include "entities/hatch.h"
 #include "entities/text.h"
@@ -32,6 +33,8 @@ namespace dxflib
 		std::vector<entities::text>& get_text() { return basic_text_; }
 		// Arc
 		const std::vector<entities::arc>& get_arcs() const { return arcs_; }
+		// Ellipse
+		const std::vector<entities::ellipse>& get_ellipses() const { return ellipses_; }
 		// Spline
 		const std::vector<entities::spline>& get_splines() const { return splines_; }
 		// Circle
@@ -51,6 +54,7 @@ namespace dxflib
 		std::vector<entities::hatch> hatches_; // HATCH Entities
 		std::vector<entities::text> basic_text_; // TEXT Entities
 		std::vector<entities::arc> arcs_; // ARC Entities
+		std::vector<entities::ellipse> ellipses_; // ELLIPSE Entities
 		std::vector<entities::spline> splines_; // SPLINE Entities
 		std::vector<entities::circle> circles_; // CIRCLE Entities
 
@@ -85,6 +89,7 @@ namespace dxflib
 			const char* text{"TEXT"};
 			const char* mtext{"MTEXT"};
 			const char* arc{ "ARC" };
+			const char* ellipse{ "ELLIPSE" };
 			const char* spline{ "SPLINE" };
 			const char* circle{"CIRCLE"};
 		};

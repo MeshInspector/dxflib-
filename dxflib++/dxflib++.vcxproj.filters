@@ -54,6 +54,9 @@
     <ClInclude Include="include\entities\spline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\entities\ellipse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cadfile.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\entities\spline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entities\ellipse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

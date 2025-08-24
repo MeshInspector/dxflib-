@@ -4,6 +4,7 @@
 #include "dxflib++/include/entities/lwpolyline.h"
 #include "dxflib++/include/entities/text.h"
 #include "dxflib++/include/entities/arc.h"
+#include "dxflib++/include/entities/ellipse.h"
 #include "dxflib++/include/entities/spline.h"
 #include <fstream>
 #include <string>
@@ -74,6 +75,7 @@ void dxflib::cadfile::parse_data()
 	entities::hatch_buffer hb;       // Hatch Buffer
 	entities::text_buffer tb;        // Text Buffer
 	entities::arc_buffer ab;         // Arch buffer
+	entities::ellipse_buffer eb;     // Ellipse buffer
 	entities::spline_buf splb;       // Spline Buffer
 	entities::circle_buffer cb;      // Circle Buffer
 
@@ -118,6 +120,12 @@ void dxflib::cadfile::parse_data()
 				current_entity = entities::entity_types::arc;
 				continue;
 			}
+			if (cl == start_markers.ellipse)
+			{
+				extraction_flag = true;
+				current_entity = entities::entity_types::ellipse;
+				continue;
+			}
 			if (cl == start_markers.spline)
 			{
 				extraction_flag = true;
@@ -158,6 +166,10 @@ void dxflib::cadfile::parse_data()
 				break;
 			case entities::entity_types::arc:
 				if (ab.parse(cl, nl))
+					linenum++;
+				break;
+			case entities::entity_types::ellipse:
+				if (eb.parse(cl, nl))
 					linenum++;
 				break;
 			case entities::entity_types::spline:
@@ -202,6 +214,11 @@ void dxflib::cadfile::parse_data()
 			case entities::entity_types::arc:
 				arcs_.emplace_back(ab);
 				ab.free();
+				extraction_flag = false;
+				break;
+			case entities::entity_types::ellipse:
+				ellipses_.emplace_back(eb);
+				eb.free();
 				extraction_flag = false;
 				break;
 			case entities::entity_types::spline:
