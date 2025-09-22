@@ -13,19 +13,19 @@
  * \brief cadfile Constructor
  * \param path Path to the DXF file
  */
-dxflib::cadfile::cadfile(const char* path) : filename_(path)
+dxflib::cadfile::cadfile(const char* path)
 {
 	std::ifstream fs;
-	fs.open(filename_);
+	fs.open(path);
 	read_file(fs);
 	parse_data();
 	linker();
 }
 
-dxflib::cadfile::cadfile(const wchar_t* path): wfilename_(path)
+dxflib::cadfile::cadfile(const wchar_t* path)
 {
 	std::ifstream fs;
-	fs.open(wfilename_);
+	fs.open(path);
 	read_file(fs);
 	parse_data();
 	linker();

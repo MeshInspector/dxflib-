@@ -39,11 +39,6 @@ namespace dxflib
 		const std::vector<entities::spline>& get_splines() const { return splines_; }
 		// Circle
 		const std::vector<entities::circle>& get_circles() const { return circles_; }
-
-		// Filename of the DXF file
-		std::string get_filename() const { return std::string{filename_}; }
-		std::wstring get_wfilename() const { return std::wstring{ wfilename_ }; }
-
 		// DXF Data
 		const std::vector<std::string>& get_data() const { return data_; }
 
@@ -58,12 +53,10 @@ namespace dxflib
 		std::vector<entities::spline> splines_; // SPLINE Entities
 		std::vector<entities::circle> circles_; // CIRCLE Entities
 
-		void read_file(std::ifstream& fs); // Reads the file that is stored in filename_
+		void read_file(std::ifstream& fs); // Reads the dxf data from stream
 		void parse_data(); // Main parse function for the dxf file: iterates through the data_ vector and
 		void linker(); // Links entities to other entities, noteably hatches and polyline
 
-		const char* filename_;
-		const wchar_t* wfilename_; // Path to the DXF file
 		std::vector<std::string> data_; // raw data from the dxf file
 	};
 
