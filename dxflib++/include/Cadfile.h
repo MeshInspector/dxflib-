@@ -6,6 +6,7 @@
 #include "entities/hatch.h"
 #include "entities/text.h"
 #include <vector>
+#include <filesystem>
 
 namespace dxflib
 {
@@ -21,6 +22,7 @@ namespace dxflib
 		 */
 		explicit cadfile(const char* path);
 		explicit cadfile(const wchar_t* path);
+		explicit cadfile(const std::filesystem::path& path);
 
 		// Public Interface
 		// Lines

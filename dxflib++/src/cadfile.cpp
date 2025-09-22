@@ -31,6 +31,14 @@ dxflib::cadfile::cadfile(const wchar_t* path)
 	linker();
 }
 
+dxflib::cadfile::cadfile(const std::filesystem::path& path)
+{
+	std::ifstream fs;
+	fs.open(path);
+	read_file(fs);
+	parse_data();
+	linker();
+}
 
 /**
  * \brief Reads the Dxf File
